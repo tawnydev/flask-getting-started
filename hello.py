@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return 'Index Page'
+    return render_template('content_exemple.html')
 
 @app.route('/hello/')
 @app.route('/hello/<name>')
@@ -21,10 +21,6 @@ def login():
         return f"Identifiant: <br> Mot de passe:"
     else:
         return url_for('show_user_profile', username='John Doe')
-
-@app.route("/<name>")
-def hello(name):
-    return f"Hello, {escape(name)}!"
 
 @app.route('/user/<username>')
 def show_user_profile(username):

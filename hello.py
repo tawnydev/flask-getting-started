@@ -3,6 +3,7 @@ from flask import url_for
 from flask import request
 from flask import render_template
 from markupsafe import escape
+from helper import valid_login, log_the_user_in
 
 app = Flask(__name__)
 
@@ -15,12 +16,20 @@ def index():
 def hello(name=None):
     return render_template('hello.html', name=name)
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['POST', 'GET'])
 def login():
+    error = None
     if request.method == 'POST':
-        return f"Identifiant: <br> Mot de passe:"
-    else:
-        return url_for('show_user_profile', username='John Doe')
+        if valid_login(request.form['username'],
+                       request.form['password']):
+            return log_the_user_in(request.form['username'])
+        else:
+            error = 'Invalid username/password'
+    searchword = request.args.get('text', '')
+
+    # the code below is executed if the request method
+    # was GET or the credentials were invalid
+    return render_template('login.html', text=searchword, error=error)
 
 @app.route('/user/<username>')
 def show_user_profile(username):
@@ -42,4 +51,3 @@ with app.test_request_context():
     print(url_for('login'))
     print(url_for('login', next='/'))
     print(url_for('show_user_profile', username='John Doe'))
-    url_for('static', filename='style.css')

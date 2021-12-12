@@ -7,6 +7,16 @@
   <h1 class="title">Hello</h1>
 {% if name %}
   <h1>Hello {{ name }}!</h1>
+{% if upload == 1 %}
+<h3 style="color: green;">Congragulations ! You uploaded your file!</h3>
+{% elif upload == 0 %}
+<h3 style="color: red;">Oups! something went wrong !</h3>
+{% endif %}
+  <form method="post" action="/upload" enctype="multipart/form-data">
+    <input type="hidden" name="user" value="{{ name }}">
+    <input type="file" id="myFile" name="filename">
+    <input type="submit">
+  </form>
   <a href="/">Return</a>
 {% else %}
   <h1>Hello, World!</h1>
